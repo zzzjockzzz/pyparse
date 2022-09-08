@@ -31,7 +31,7 @@ class PyParse:
 
             if self.pair == Pair.value:
                 self.__value_pairs()
-                return setattr(self, key.replace('-','_')\
+                setattr(self, key.replace('-','_')\
             .replace('--','__')\
             .replace('~','_')\
             .replace('!','_')\
@@ -64,7 +64,7 @@ class PyParse:
             elif self.pair == Pair.union:
                 self.__union_pairs()
                 print(key)
-                return setattr(self, key.replace('-','_')\
+                setattr(self, key.replace('-','_')\
             .replace('--','__')\
             .replace('~','_')\
             .replace('!','_')\
