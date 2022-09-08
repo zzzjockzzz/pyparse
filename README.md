@@ -8,10 +8,10 @@ PyParse is a argv/list parser, made purely in Python.
 # main.py
 from pyparse import *
 
-parser = PyParser(sys.argv, pair=Pair.union)
+parser = PyParse(sys.argv, pair=Pair.union)
 parser.add_argument(argument="--test", type=int, discriminator="=")
 parser.add_argument(argument="--test2", type=int, discriminator=":")
-a.parse()
+parser.parse()
 
 print("Value of --test and --test2 combined:", a.contents("--test") + a.contents("--test2"))
 ```
