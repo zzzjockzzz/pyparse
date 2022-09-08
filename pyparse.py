@@ -1,6 +1,8 @@
 
-import sys
+import warnings,sys
 from enum import Enum
+
+warnings.simplefilter('always', DeprecationWarning)
 
 class Pair(Enum):
     value = 'value'
@@ -12,6 +14,8 @@ class Predefined(Enum):
     false = '[false]'
     null = '[null]'
 
+def disable_warnings():
+    warnings.filterwarnings("ignore")
 
 class PyParse:
     def __init__(self, args, pair=Pair.value):
@@ -19,16 +23,110 @@ class PyParse:
         self.undeclared_arguments = {}
         self.all_args = self.undeclared_arguments | self.declared_arguments
         self.pair = pair
-        self.args = args
+        self.arguments = args
 
     def parse(self):
-        
-        if self.pair == Pair.value:
-            return self.__value_pairs()
-        elif self.pair == Pair.union:
-            return self.__union_pairs()
-        elif self.pair == Pair.all_args:
-            pass
+        for key in self.declared_arguments.keys():
+            
+
+            if self.pair == Pair.value:
+                self.__value_pairs()
+                return setattr(self, key.replace('-','_')\
+            .replace('--','__')\
+            .replace('~','_')\
+            .replace('!','_')\
+            .replace('@','_')\
+            .replace('#','_')\
+            .replace('$','_')\
+            .replace('%','_')\
+            .replace('^','_')\
+            .replace('&','_')\
+            .replace('*','_')\
+            .replace('(','_')\
+            .replace(')','_')\
+            .replace('+','_')\
+            .replace('=','_')\
+            .replace('{','_')\
+            .replace('}','_')\
+            .replace('[','_')\
+            .replace(']','_')\
+            .replace('|','_')\
+            .replace('\\','_')\
+            .replace(':','_')\
+            .replace(';','_')\
+            .replace('"','_')\
+            .replace("'",'_')\
+            .replace('<','_')\
+            .replace('>','_')\
+            .replace('?','_')\
+            .replace('/','_')\
+            .replace('.','_'), self.undeclared_arguments[key]['contents'])
+            elif self.pair == Pair.union:
+                self.__union_pairs()
+                print(key)
+                return setattr(self, key.replace('-','_')\
+            .replace('--','__')\
+            .replace('~','_')\
+            .replace('!','_')\
+            .replace('@','_')\
+            .replace('#','_')\
+            .replace('$','_')\
+            .replace('%','_')\
+            .replace('^','_')\
+            .replace('&','_')\
+            .replace('*','_')\
+            .replace('(','_')\
+            .replace(')','_')\
+            .replace('+','_')\
+            .replace('=','_')\
+            .replace('{','_')\
+            .replace('}','_')\
+            .replace('[','_')\
+            .replace(']','_')\
+            .replace('|','_')\
+            .replace('\\','_')\
+            .replace(':','_')\
+            .replace(';','_')\
+            .replace('"','_')\
+            .replace("'",'_')\
+            .replace('<','_')\
+            .replace('>','_')\
+            .replace('?','_')\
+            .replace('/','_')\
+            .replace('.','_'), self.declared_arguments[key]['contents'])
+
+            elif self.pair == Pair.all_args:
+                
+                setattr(self, key.replace('-','_')\
+            .replace('--','__')\
+            .replace('~','_')\
+            .replace('!','_')\
+            .replace('@','_')\
+            .replace('#','_')\
+            .replace('$','_')\
+            .replace('%','_')\
+            .replace('^','_')\
+            .replace('&','_')\
+            .replace('*','_')\
+            .replace('(','_')\
+            .replace(')','_')\
+            .replace('+','_')\
+            .replace('=','_')\
+            .replace('{','_')\
+            .replace('}','_')\
+            .replace('[','_')\
+            .replace(']','_')\
+            .replace('|','_')\
+            .replace('\\','_')\
+            .replace(':','_')\
+            .replace(';','_')\
+            .replace('"','_')\
+            .replace("'",'_')\
+            .replace('<','_')\
+            .replace('>','_')\
+            .replace('?','_')\
+            .replace('/','_')\
+            .replace('.','_'), self.all_arguments[key]['contents'])
 
     def add_argument(self, argument, type=str, usage="Usage: ", discriminator=None):
         if self.pair == Pair.value and discriminator != None:
@@ -51,6 +149,7 @@ class PyParse:
             return None
         
     def contents(self, argument):
+        # warnings.warn(f"contents() is deprecated, use PyParse().{argument.replace('--','__').replace('-','_')}", DeprecationWarning)
         return self.declared_arguments[argument]['contents']
 
     def __value_pairs(self):
@@ -61,16 +160,16 @@ class PyParse:
     
         
         for key in self.declared_arguments.keys():
-            for i, arg in enumerate(self.args):
+            for i, arg in enumerate(self.arguments):
                 if arg == key:
-                    if self.args[i+1] == Predefined.true:
+                    if self.arguments[i+1] == Predefined.true:
                         self.undeclared_arguments[key]['contents'] = True
-                    elif self.args[i+1] == Predefined.false:
+                    elif self.arguments[i+1] == Predefined.false:
                         self.undeclared_arguments[key]['contents'] = False
-                    elif self.args[i+1] == Predefined.null:
+                    elif self.arguments[i+1] == Predefined.null:
                         self.undeclared_arguments[key]['contents'] = None
                     else:
-                        self.undeclared_arguments[key]['contents'] = self.declared_arguments[key]['type'](self.args[i+1])
+                        self.undeclared_arguments[key]['contents'] = self.declared_arguments[key]['type'](self.arguments[i+1])
                 else:
                     ignored.append(arg)
 
@@ -83,7 +182,7 @@ class PyParse:
         arg:str
         i:int
     
-        for i, arg in enumerate(self.args):
+        for i, arg in enumerate(self.arguments):
             all_.append(arg)
             for key in self.declared_arguments.keys():
                 if arg == key:
@@ -96,22 +195,13 @@ class PyParse:
                                 self.declared_arguments[key]['contents'] = self.declared_arguments[key]['type'](temp[1])
                     else:
                         if arg == self.declared_arguments[key]['discriminator']:
-                            if self.args[i+1] == Predefined.true:
+                            if self.arguments[i+1] == Predefined.true:
                                 self.declared_arguments[key]['contents'] = True
-                            elif self.args[i+1] == Predefined.false:
+                            elif self.arguments[i+1] == Predefined.false:
                                 self.declared_arguments[key]['contents'] = False
-                            elif self.args[i+1] == Predefined.null:
+                            elif self.arguments[i+1] == Predefined.null:
                                 self.declared_arguments[key]['contents'] = None
                             else:
-                                self.declared_arguments[key]['contents'] = self.declared_arguments[key]['type'](self.args[i+1])
+                                self.declared_arguments[key]['contents'] = self.declared_arguments[key]['type'](self.arguments[i+1])
                     
         return pairs
-
-
-
-a = PyParse(sys.argv, pair=Pair.union)
-a.add_argument('--test', type=int, discriminator=':', usage="test 123")
-a.add_argument('--test2', type=int, discriminator="=", usage="test 1234")
-a.parse()
-
-print(a.contents('--test') + a.contents('--test2'))
