@@ -16,10 +16,14 @@ parser.parse()
 print("Value of --test and --test2 combined:", a.contents("--test") + a.contents("--test2"))
 ```
 
-Running our program:
+Running our program with:
+
 ``python main.py --test=123 --test2:123``
 
-Returns this:
+
+
+Outputs:
+
 ``Value of --test and --test2 combined: 246``
 
 
